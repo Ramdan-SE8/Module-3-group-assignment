@@ -18,7 +18,7 @@ import group3.group3_assignment.service.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-        @Autowired
+    @Autowired
     private UserService userService;
 
     @PostMapping
@@ -27,15 +27,17 @@ public class UserController {
         return ResponseEntity.ok(newUser);
     }
 
-    @GetMapping("/{userId}/recipes")
-    public ResponseEntity<List<Recipe>> getUserRecipes(@PathVariable Integer userId) {
-        List<Recipe> recipes = userService.getRecipesByUser(userId);
-        return ResponseEntity.ok(recipes);
-    }
+    // @GetMapping("/{userId}/recipes")
+    // public ResponseEntity<List<Recipe>> getUserRecipes(@PathVariable Integer
+    // userId) {
+    // List<Recipe> recipes = userService.getRecipesByUser(userId);
+    // return ResponseEntity.ok(recipes);
+    // }
 
-    @PostMapping("/{userId}/recipes")
-    public ResponseEntity<Recipe> uploadRecipe(@PathVariable Integer userId, @RequestBody Recipe recipe) {
-        Recipe newRecipe = userService.uploadRecipe(userId, recipe);
-        return ResponseEntity.ok(newRecipe);
-    }
+    // @PostMapping("/{userId}/recipes")
+    // public ResponseEntity<Recipe> uploadRecipe(@PathVariable Integer userId,
+    // @RequestBody Recipe recipe) {
+    // Recipe newRecipe = userService.uploadRecipe(userId, recipe);
+    // return ResponseEntity.ok(newRecipe);
+    // }
 }
