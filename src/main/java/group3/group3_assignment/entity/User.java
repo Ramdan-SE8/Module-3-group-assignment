@@ -1,5 +1,7 @@
 package group3.group3_assignment.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,4 +36,9 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    public List<Recipe> getRecipes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRecipes'");
+    }
 }
