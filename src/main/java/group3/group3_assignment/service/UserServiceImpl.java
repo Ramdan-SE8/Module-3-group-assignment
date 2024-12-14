@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public Recipe uploadRecipe(Integer userId, Recipe recipe) {
         User user = userRepo.findById(userId)
                             .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-        recipe.setUser(user);
+        //recipe.setUser(user);
         return recipeRepo.save(recipe);
     }
 
