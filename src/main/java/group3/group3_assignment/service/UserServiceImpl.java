@@ -33,21 +33,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Recipe> getRecipesByUser(Integer userId) {
         User user = userRepo.findById(userId)
-                            .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
         return user.getRecipes();
     }
 
     @Override
     public Recipe uploadRecipe(Integer userId, Recipe recipe) {
         User user = userRepo.findById(userId)
-                            .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-        //recipe.setUser(user);
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        // recipe.setUser(user);
         return recipeRepo.save(recipe);
     }
 
     public User getUser(String id) {
         return userRepo.findById(Integer.parseInt(id))
-                       .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
 
     public List<User> getAllUsers() {
