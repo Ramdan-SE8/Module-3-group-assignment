@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import group3.group3_assignment.entity.Favourites;
 import group3.group3_assignment.entity.Recipe;
+import group3.group3_assignment.service.FavouritesService;
 import group3.group3_assignment.service.RecipeService;
 import jakarta.validation.Valid;
 
@@ -25,11 +27,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class RecipeController {
 
     private RecipeService recipeService;
+    private FavouritesService favouritesService;  //Added by Ramdan 2024-12-15
 
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class);
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, FavouritesService favouritesService) {
         this.recipeService = recipeService;
+        this.favouritesService = favouritesService;  //Added by Ramdan 2024-12-15
     }
 
     @PostMapping("")
@@ -67,6 +71,15 @@ public class RecipeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    //****************************** */ Post one favourite (added by Ramdan 2024-12-15)******************************
+    @PostMapping("/me{id}/favourite{recipeId}")
+    public ResponseEntity<Favourites> addFavouriteToRecipe(@PathVariable Long id, @PathVariable Integer recipeId,
+        @RequestBody Favourites favourites) {
+        Favourites newFavourites = favouritesService.addFavourites(id, recipeId, favourites);
+        logger.info("User (userId "+id+") added one recipe (recipeId "+recipeId+ ") to favourites list");
+        return new ResponseEntity<>(newFavourites, HttpStatus.CREATED);
+    }
+    //********************************************************************************************************************** */
 }
 
 // Recipe createRecipe(Recipe recipe);
