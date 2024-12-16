@@ -2,6 +2,8 @@ package group3.group3_assignment.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -51,8 +53,8 @@ public class Recipe {
     @Column(name = "steps")
     private List<String> steps;
 
-    public void setUser(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setUser'");
-    }
+    @JsonIgnoreProperties("recipes")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

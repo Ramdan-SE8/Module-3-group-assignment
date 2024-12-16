@@ -6,7 +6,6 @@ import group3.group3_assignment.exception.UserNotFoundException;
 import group3.group3_assignment.repository.UserRepo;
 import group3.group3_assignment.repository.RecipeRepo;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -24,34 +23,28 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(user);
     }
 
-    // @Override
-    // public List<Recipe> getRecipesByUser(Integer userId) {
-    //     User user = userRepo.findById(userId)
-    //             .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-    //     return user.getRecipes();
-    // }
-
     @Override
-    public Recipe uploadRecipe(Integer userId, Recipe recipe) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-        // recipe.setUser(user);  // Uncomment this line if User-Recipe relationship is implemented
-        return recipeRepo.save(recipe);
-    }
-
-    @Override
-    public User getUser(Integer id) {  // Updated from String to Integer
+    public User getUser(Integer id) {
         return userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
 
     @Override
-    public User updateUser(Integer id, User user) {  // Updated from String to Integer
-        User existingUser = getUser(id);
-        existingUser.setUsername(user.getUsername());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-        return userRepo.save(existingUser);
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public User updateUser(Integer id, User user) {
+        return userRepo.findById(id)
+                .map(existingUser -> {
+                    // Update user fields
+                    existingUser.setUsername(user.getUsername());
+                    existingUser.setEmail(user.getEmail());
+                    existingUser.setPassword(user.getPassword());
+                    return userRepo.save(existingUser);
+                })
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
 
     @Override
@@ -62,7 +55,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+    public Recipe addRecipeToUser(Integer id, Recipe recipe) {
+        User selectedUser = userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(("User not found with ID: " + id)));
+        recipe.setUser(selectedUser);
+        return recipeRepo.save(recipe);
     }
+
+    @Override
+    public List<Recipe> getRecipesByUser(Integer userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        return user.getRecipes();
+    }
+
+    // @Override
+    // public Recipe uploadRecipe(Integer userId, Recipe recipe) {
+    // User user = userRepo.findById(userId)
+    // .orElseThrow(() -> new UserNotFoundException("User not found with ID: " +
+    // userId));
+    // // recipe.setUser(user); // Uncomment this line if User-Recipe relationship
+    // is
+    // // implemented
+    // return recipeRepo.save(recipe);
+    // }
 }
