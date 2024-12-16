@@ -4,14 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import group3.group3_assignment.entity.Recipe;
 import group3.group3_assignment.entity.User;
 import group3.group3_assignment.service.UserService;
 
@@ -27,17 +21,27 @@ public class UserController {
         return ResponseEntity.ok(newUser);
     }
 
-    // @GetMapping("/{userId}/recipes")
-    // public ResponseEntity<List<Recipe>> getUserRecipes(@PathVariable Integer
-    // userId) {
-    // List<Recipe> recipes = userService.getRecipesByUser(userId);
-    // return ResponseEntity.ok(recipes);
-    // }
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
 
-    // @PostMapping("/{userId}/recipes")
-    // public ResponseEntity<Recipe> uploadRecipe(@PathVariable Integer userId,
-    // @RequestBody Recipe recipe) {
-    // Recipe newRecipe = userService.uploadRecipe(userId, recipe);
-    // return ResponseEntity.ok(newRecipe);
-    // }
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
+        User user = userService.getUser(id);  // Updated to directly pass Integer
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        User updatedUser = userService.updateUser(id, user);  // Updated to directly pass Integer
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }

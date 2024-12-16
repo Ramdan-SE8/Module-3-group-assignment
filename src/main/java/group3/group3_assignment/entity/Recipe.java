@@ -34,31 +34,25 @@ public class Recipe {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "Image URL is mandatory")
     @Column(name = "imgSrc")
     private String imgSrc;
 
-    @Size(min = 5, max = 100, message = "Title must be between 5 characters long")
     @Column(name = "title")
     private String title;
 
-    @Size(min = 5, max = 300, message = "Title must be minimum 5 characters long")
     @Column(name = "description")
     private String description;
 
-    @NotNull(message = "Ingredients cannot be empty")
-    @Size(min = 1, message = "Must have minimum 1 ingredient")
     @ElementCollection
     @Column(name = "ingredients")
     private List<String> ingredients;
 
-    @NotNull(message = "Steps cannot be empty")
-    @Size(min = 1, message = "Must have minimum 1 step")
     @ElementCollection
     @Column(name = "steps")
     private List<String> steps;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    public void setUser(User user) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setUser'");
+    }
 }
