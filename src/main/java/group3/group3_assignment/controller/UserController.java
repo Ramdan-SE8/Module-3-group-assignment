@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import group3.group3_assignment.entity.User;
 import group3.group3_assignment.service.UserService;
-// import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -25,7 +25,7 @@ public class UserController {
 
     // Create a user
     @PostMapping("")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         User newUser = userService.addUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
@@ -46,7 +46,7 @@ public class UserController {
 
     // Update User
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
         return ResponseEntity.ok(updatedUser);
     }

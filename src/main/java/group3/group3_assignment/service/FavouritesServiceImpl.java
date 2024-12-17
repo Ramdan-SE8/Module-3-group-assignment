@@ -50,10 +50,11 @@ public class FavouritesServiceImpl implements FavouritesService {
   @Override
   public Favourites addFavourites(Long id, Integer recipeId, Favourites favourites) {
     Recipe selectedRecipe = recipeRepo.findById(recipeId).orElseThrow(() -> new RecipeNotFoundException(recipeId));
-    
-    if(userRepo.findById(id)==null) {
-      throw new FavUserNotFoundException();}
-       User selectedUser = (User) userRepo.findById(id);
+
+    if (userRepo.findById(id) == null) {
+      throw new FavUserNotFoundException();
+    }
+    User selectedUser = (User) userRepo.findById(id);
     if (favouritesRepository.findByUserIdAndRecipeId(id, recipeId) != null) {
       throw new DuplicateFavouritesException();
     }
