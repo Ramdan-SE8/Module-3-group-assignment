@@ -7,12 +7,12 @@ import group3.group3_assignment.entity.Recipe;
 public interface RecipeService {
     Recipe createRecipe(Recipe recipe);
 
-    Recipe getOneRecipe(Integer id);
+    Recipe getOneRecipe(Integer userId);
 
     List<Recipe> getAllRecipes();
 
-    Recipe updateOneRecipe(Integer id, Recipe recipe);
+    Recipe updateOneRecipe(Integer recipeId, Recipe recipe, Integer userId);
 
-    void deleteRecipe(Integer id);
+    void deleteRecipe(Integer recipeId, Integer userId);
 
 }

@@ -97,7 +97,7 @@ public class RecipeControllerTest {
                 String recipeJson = objectMapper.writeValueAsString(recipe);
 
                 // 2) build a request to "/{id}"
-                RequestBuilder request = MockMvcRequestBuilders.put("/recipe/3")
+                RequestBuilder request = MockMvcRequestBuilders.put("/recipe/3?userId=1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(recipeJson);
                 // 3) perform the request and get a response and assert
@@ -121,7 +121,7 @@ public class RecipeControllerTest {
         @Test
         public void testDeleteOneRecipe() throws Exception {
                 // 1) build request to "/{id}"
-                RequestBuilder request = MockMvcRequestBuilders.delete("/recipe/1");
+                RequestBuilder request = MockMvcRequestBuilders.delete("/recipe/1?userId=1");
                 // 2) perform the request and get a response and assert
                 mockMvc.perform(request).andExpect(status().isNoContent());
         }

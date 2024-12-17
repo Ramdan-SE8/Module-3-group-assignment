@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import group3.group3_assignment.entity.Recipe;
 import group3.group3_assignment.exception.RecipeNotFoundException;
+import group3.group3_assignment.exception.UserNotAuthorizeException;
 import group3.group3_assignment.repository.RecipeRepo;
 
 @Service
@@ -33,19 +34,40 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe updateOneRecipe(Integer id, Recipe recipe) {
-        Recipe recipeToUpdate = recipeRepo.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
+    public Recipe updateOneRecipe(Integer recipeId, Recipe recipe, Integer userId) {
+        // try to get recipe with userid and recipeid. if not found, throw exception.
+        Recipe recipeToUpdate = recipeRepo.findByUser_IdAndId(userId, recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(recipeId));
+
+        // recipe is found
+        // throw exception if the user id is not the same as the user id found in
+        // recipes
+        if (!recipeToUpdate.getUser().getId().equals(userId)) {
+            throw new UserNotAuthorizeException(userId, "edit");
+        }
+
+        // if user id is the same, contune to update the recipe
         recipeToUpdate.setDescription(recipe.getDescription());
         recipeToUpdate.setIngredients(recipe.getIngredients());
         recipeToUpdate.setSteps(recipe.getSteps());
         recipeToUpdate.setTitle(recipe.getTitle());
+        recipeToUpdate.setImgSrc(recipe.getImgSrc());
         return recipeRepo.save(recipeToUpdate);
     }
 
     @Override
-    public void deleteRecipe(Integer id) {
-        recipeRepo.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
-        recipeRepo.deleteById(id);
-    }
+    public void deleteRecipe(Integer recipeId, Integer userId) {
+        // try to get recipe with userid and recipeid. if not found, throw exception.
+        Recipe recipeToDelete = recipeRepo.findByUser_IdAndId(userId, recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(recipeId));
 
+        // recipe is found
+        // throw exception if the user id is not the same as the user id found in
+        // recipes
+        if (!recipeToDelete.getUser().getId().equals(userId)) {
+            throw new UserNotAuthorizeException(userId, "delete");
+        }
+        // delete the recipe id user id is valid
+        recipeRepo.delete(recipeToDelete);
+    }
 }

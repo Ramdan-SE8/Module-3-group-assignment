@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import group3.group3_assignment.entity.Recipe;
+import group3.group3_assignment.entity.User;
 import group3.group3_assignment.exception.RecipeNotFoundException;
 import group3.group3_assignment.repository.RecipeRepo;
 
@@ -30,11 +31,15 @@ public class RecipeServiceImplTest {
     RecipeServiceImpl recipeServiceImpl;
 
     private Recipe recipe;
+    private User user;
 
     // initialize recipe object before each test
     @BeforeEach
     public void setup() {
+        user = User.builder().id(1).build();
         recipe = Recipe.builder().title("Stir Fried Noodles")
+                .id(1)
+                .user(user)
                 .imgSrc("https://www.seriouseats.com/thmb/KOV3OvnLeh6RW64lEnRixbRxOq4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/SEA-QiAi-stir-fried-lo-mein-noodles-pork-vegetables-recipe-hero-a55a4baa9f22449fbe036142f1047430.jpg")
                 .description("A quick and tasty stir-fried noodle recipe packed with veggies and savory sauce.")
                 .ingredients(Arrays.asList("Egg noodles",
@@ -49,6 +54,7 @@ public class RecipeServiceImplTest {
                         "Add cooked noodles and soy sauce, tossing until combined.",
                         "Garnish with green onions and serve."))
                 .build();
+
     }
 
     // 3. create the test
@@ -120,12 +126,16 @@ public class RecipeServiceImplTest {
     @Test
     public void testUpdateOneRecipe() {
         Integer recipeId = 1;
+        Integer userId = 1;
 
         // mocking the recipeRepo by finding the recipeId and returning an optional
-        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(recipe));
+        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.of(recipe));
 
         // creating a updated recipe
-        Recipe recipeToUpdate = Recipe.builder().title("Dijon Mustard Salmon")
+        Recipe recipeToUpdate = Recipe.builder()
+                .id(userId)
+                .user(user)
+                .title("Dijon Mustard Salmon")
                 .imgSrc("https://getfish.com.au/cdn/shop/articles/Step_4_-_crispy_salmon.png?v=1715832861")
                 .description("A simple yet flavorful Dijon mustard salmon baked to perfection.")
                 .ingredients(Arrays.asList("Salmon fillets",
@@ -142,11 +152,11 @@ public class RecipeServiceImplTest {
                 .build();
 
         // Mock saving the repo then return the updated recipe (this will be called when
-        // the upateOne recipe is called)
+        // the updateOne recipe is called)
         when(recipeRepo.save(recipe)).thenReturn(recipeToUpdate);
 
         // call the updateOneRecipe method
-        Recipe updatedRecipe = recipeServiceImpl.updateOneRecipe(recipeId, recipeToUpdate);
+        Recipe updatedRecipe = recipeServiceImpl.updateOneRecipe(recipeId, recipeToUpdate, userId);
 
         // asserts the result
         assertEquals(recipeToUpdate, updatedRecipe);
@@ -158,32 +168,35 @@ public class RecipeServiceImplTest {
     @Test
     public void testUpdateOneRecipeNotFound() {
         Integer recipeId = 2;
+        Integer userId = 2;
 
         // mock the repo behaviour by finding the id
-        when(recipeRepo.findById(recipeId)).thenReturn(Optional.empty());
-        assertThrows(RecipeNotFoundException.class, () -> recipeServiceImpl.updateOneRecipe(recipeId, recipe));
+        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.empty());
+        assertThrows(RecipeNotFoundException.class, () -> recipeServiceImpl.updateOneRecipe(recipeId, recipe, userId));
     }
 
     @Test
     public void testDeleteRecipe() {
         Integer recipeId = 1;
+        Integer userId = 1;
 
         // mocking the recipeRepo by finding the recipeId and returning an optional
-        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(recipe));
+        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.of(recipe));
 
         // call the deleteRecipe method
-        recipeServiceImpl.deleteRecipe(recipeId);
+        recipeServiceImpl.deleteRecipe(recipeId, userId);
 
         // verify the delete method is called 1 time with correct id
-        verify(recipeRepo, times(1)).deleteById(recipeId);
+        verify(recipeRepo, times(1)).delete(recipe);
     }
 
     @Test
     public void testDeleteRecipeNotFound() {
         Integer recipeId = 2;
+        Integer userId = 2;
 
         // mock the repo behaviour by finding the id
-        when(recipeRepo.findById(recipeId)).thenReturn(Optional.empty());
-        assertThrows(RecipeNotFoundException.class, () -> recipeServiceImpl.deleteRecipe(recipeId));
+        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.empty());
+        assertThrows(RecipeNotFoundException.class, () -> recipeServiceImpl.deleteRecipe(recipeId, userId));
     }
 }

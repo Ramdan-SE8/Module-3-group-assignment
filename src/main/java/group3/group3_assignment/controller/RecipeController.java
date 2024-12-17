@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import group3.group3_assignment.entity.Favourites;
 import group3.group3_assignment.entity.Recipe;
 import group3.group3_assignment.service.FavouritesService;
 import group3.group3_assignment.service.RecipeService;
@@ -27,13 +27,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class RecipeController {
 
     private RecipeService recipeService;
-    private FavouritesService favouritesService;  //Added by Ramdan 2024-12-15
 
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class);
 
     public RecipeController(RecipeService recipeService, FavouritesService favouritesService) {
         this.recipeService = recipeService;
-        this.favouritesService = favouritesService;  //Added by Ramdan 2024-12-15
     }
 
     @PostMapping("")
@@ -50,44 +48,25 @@ public class RecipeController {
         return new ResponseEntity<>(allRecipes, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getOneRecipe(@PathVariable Integer id) {
-        Recipe oneRecipe = recipeService.getOneRecipe(id);
-        logger.info("Got one recipe with id " + id + ".");
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<Recipe> getOneRecipe(@PathVariable Integer recipeId) {
+        Recipe oneRecipe = recipeService.getOneRecipe(recipeId);
+        logger.info("Got one recipe with id " + recipeId + ".");
         return new ResponseEntity<>(oneRecipe, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Recipe> updateOneRecipe(@PathVariable Integer id, @Valid @RequestBody Recipe Recipe) {
-        Recipe updatedRecipe = recipeService.updateOneRecipe(id, Recipe);
-        logger.info("Updated recipe with id " + id + ".");
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<Recipe> updateOneRecipe(@PathVariable Integer recipeId, @RequestParam Integer userId,
+            @Valid @RequestBody Recipe recipe) {
+        Recipe updatedRecipe = recipeService.updateOneRecipe(recipeId, recipe, userId);
+        logger.info("User with id " + userId + "Updated recipe with id " + recipeId + ".");
         return new ResponseEntity<>(updatedRecipe, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteOneRecipe(@PathVariable Integer id) {
-        recipeService.deleteRecipe(id);
-        logger.info("Deleted recipe with id " + id + ".");
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<HttpStatus> deleteOneRecipe(@PathVariable Integer recipeId, @RequestParam Integer userId) {
+        recipeService.deleteRecipe(recipeId, userId);
+        logger.info("Deleted recipe with id " + recipeId + ".");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    //****************************** */ Post one favourite (added by Ramdan 2024-12-15)******************************
-    @PostMapping("/me{id}/favourite{recipeId}")
-    public ResponseEntity<Favourites> addFavouriteToRecipe(@PathVariable Long id, @PathVariable Integer recipeId,
-        @RequestBody Favourites favourites) {
-        Favourites newFavourites = favouritesService.addFavourites(id, recipeId, favourites);
-        logger.info("User (userId "+id+") added one recipe (recipeId "+recipeId+ ") to favourites list");
-        return new ResponseEntity<>(newFavourites, HttpStatus.CREATED);
-    }
-    //********************************************************************************************************************** */
 }
-
-// Recipe createRecipe(Recipe recipe);
-
-// Recipe getOneRecipe(Integer id);
-
-// List<Recipe> getAllRecipes();
-
-// Recipe updateOneRecipe(Integer id, Recipe recipe);
-
-// void deleteRecipe(Integer id);

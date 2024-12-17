@@ -41,7 +41,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties("recipes")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recipe> recipes;
 

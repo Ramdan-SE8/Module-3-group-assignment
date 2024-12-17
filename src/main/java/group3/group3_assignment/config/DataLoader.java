@@ -18,12 +18,22 @@ public class DataLoader {
         public DataLoader(RecipeRepo recipeRepo, UserRepo userRepo) {
                 this.recipeRepo = recipeRepo;
                 this.userRepo = userRepo;
+
         }
 
         @PostConstruct
         public void loadData() {
                 recipeRepo.deleteAll();
-                recipeRepo.save(Recipe.builder()
+                User user1 = userRepo.save(User.builder().email("abc@gmail.com").username("John")
+                                .password("123ABCabc!@#").build());
+                User user2 = userRepo.save(User.builder().email("123@gmail.com").username("Stark")
+                                .password("123ABCabc!@#").build());
+
+                User user3 = userRepo.save(User.builder().email("marytan@email.com").username("marytangourmet")
+                                .password("password")
+                                .build());
+                Recipe recipe1 = recipeRepo.save(Recipe.builder()
+                                .user(user1)
                                 .title("Stir Fried Noodles")
                                 .imgSrc("https://www.seriouseats.com/thmb/KOV3OvnLeh6RW64lEnRixbRxOq4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/SEA-QiAi-stir-fried-lo-mein-noodles-pork-vegetables-recipe-hero-a55a4baa9f22449fbe036142f1047430.jpg")
                                 .description("A quick and tasty stir-fried noodle recipe packed with veggies and savory sauce.")
@@ -40,7 +50,8 @@ public class DataLoader {
                                                 "Garnish with green onions and serve."))
                                 .build());
 
-                recipeRepo.save(Recipe.builder()
+                Recipe recipe2 = recipeRepo.save(Recipe.builder()
+                                .user(user2)
                                 .title("Seared Eggplant")
                                 .imgSrc("https://www.sweetashoney.co/wp-content/uploads/Sauteed-Eggplant-2.jpg")
                                 .description("This seared eggplant dish is perfect for a light and flavorful vegetarian meal.")
@@ -56,7 +67,8 @@ public class DataLoader {
                                                 "Drizzle with lemon juice and garnish with parsley before serving."))
                                 .build());
 
-                recipeRepo.save(Recipe.builder()
+                Recipe recipe3 = recipeRepo.save(Recipe.builder()
+                                .user(user1)
                                 .title("Savory Carrot Muffins")
                                 .imgSrc("https://images.contentstack.io/v3/assets/blt8a393bb3b76c0ede/blt653e46ad897ffac9/65482c54d2a103040ad8d9ef/savoury-breakfast-muffins-recipe-header.jpg?height=675.0&width=1200.0&crop=1200.0%2C675.0%2Cx0.0%2Cy45.0&format=pjpg&auto=webp")
                                 .description("Delicious savory muffins made with carrots and a blend of spices.")
@@ -73,7 +85,8 @@ public class DataLoader {
                                                 "Bake for 20 minutes until golden."))
                                 .build());
 
-                recipeRepo.save(Recipe.builder()
+                Recipe recipe4 = recipeRepo.save(Recipe.builder()
+                                .user(user2)
                                 .title("Dijon Mustard Salmon")
                                 .imgSrc("https://getfish.com.au/cdn/shop/articles/Step_4_-_crispy_salmon.png?v=1715832861")
                                 .description("A simple yet flavorful Dijon mustard salmon baked to perfection.")
@@ -90,7 +103,8 @@ public class DataLoader {
                                                 "Bake for 12-15 minutes until salmon is cooked through."))
                                 .build());
 
-                recipeRepo.save(Recipe.builder()
+                Recipe recipe5 = recipeRepo.save(Recipe.builder()
+                                .user(user3)
                                 .title("Rice Noodles with Vegetables")
                                 .imgSrc("https://static01.nyt.com/images/2014/06/02/dining/Rice-Noodles/Rice-Noodles-superJumbo-v2.jpg")
                                 .description("A light and refreshing rice noodle dish with sautéed vegetables.")
@@ -103,8 +117,6 @@ public class DataLoader {
                                 .steps(Arrays.asList("Cook rice noodles according to package instructions.",
                                                 "Stir-fry garlic, carrots, and zucchini in sesame oil.",
                                                 "Add the cooked noodles and soy sauce, toss well, and serve."))
-                                .build());
-                userRepo.save(User.builder().email("marytan@email.com").username("marytangourmet").password("password")
                                 .build());
 
         }
