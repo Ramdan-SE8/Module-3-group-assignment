@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import group3.group3_assignment.entity.Recipe;
 
 public interface RecipeRepo extends JpaRepository<Recipe, Integer> {
-    Optional<Recipe> findByUser_IdAndId(Integer userId, Integer recipeId);
+    Optional<Recipe> findByUser_IdAndId(Long userId, Integer recipeId);
 
 }

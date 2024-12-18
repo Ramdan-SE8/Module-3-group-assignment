@@ -30,7 +30,6 @@ public class UserServiceImplTest {
     @BeforeEach
     public void setUp() {
         user = User.builder()
-                .id(1)
                 .username("john_doe")
                 .email("john.doe@example.com")
                 .password("securePassword123")
@@ -50,21 +49,21 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserById_UserFound() {
-        when(userRepo.findById(1)).thenReturn(Optional.of(user));
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
-        User foundUser = userService.getUser(1);
+        User foundUser = userService.getUser(1L);
 
         assertNotNull(foundUser);
         assertEquals("john_doe", foundUser.getUsername());
-        verify(userRepo, times(1)).findById(1);
+        verify(userRepo, times(1)).findById(1L);
     }
 
     @Test
     public void testGetUserById_UserNotFound() {
-        when(userRepo.findById(1)).thenReturn(Optional.empty());
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.getUser(1));
-        verify(userRepo, times(1)).findById(1);
+        assertThrows(UserNotFoundException.class, () -> userService.getUser(1L));
+        verify(userRepo, times(1)).findById(1L);
     }
 
     @Test
@@ -75,24 +74,24 @@ public class UserServiceImplTest {
                 .password("newPassword123")
                 .build();
 
-        when(userRepo.findById(1)).thenReturn(Optional.of(user));
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
         when(userRepo.save(any(User.class))).thenReturn(user);
 
-        User updatedUser = userService.updateUser(1, updatedDetails);
+        User updatedUser = userService.updateUser(1L, updatedDetails);
 
         assertNotNull(updatedUser);
         assertEquals("updated_name", updatedUser.getUsername());
-        verify(userRepo, times(1)).findById(1);
+        verify(userRepo, times(1)).findById(1L);
         verify(userRepo, times(1)).save(any(User.class));
     }
 
     @Test
     public void testDeleteUser() {
-        when(userRepo.findById(1)).thenReturn(Optional.of(user));
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
-        userService.deleteUser(1);
+        userService.deleteUser(1L);
 
-        verify(userRepo, times(1)).findById(1);
+        verify(userRepo, times(1)).findById(1L);
         verify(userRepo, times(1)).delete(user);
     }
 }

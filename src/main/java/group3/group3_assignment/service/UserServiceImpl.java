@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(Integer id) {
+    public User getUser(Long id) {
         return userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Integer id, User user) {
+    public User updateUser(Long id, User user) {
         return userRepo.findById(id)
                 .map(existingUser -> {
                     // Update user fields
@@ -48,14 +48,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
         userRepo.delete(user);
     }
 
     @Override
-    public Recipe addRecipeToUser(Integer id, Recipe recipe) {
+    public Recipe addRecipeToUser(Long id, Recipe recipe) {
         User selectedUser = userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(("User not found with ID: " + id)));
         recipe.setUser(selectedUser);
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Recipe> getRecipesByUser(Integer userId) {
+    public List<Recipe> getRecipesByUser(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
         return user.getRecipes();

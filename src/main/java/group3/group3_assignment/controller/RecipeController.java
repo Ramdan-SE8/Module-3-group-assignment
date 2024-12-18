@@ -56,7 +56,7 @@ public class RecipeController {
     }
 
     @PutMapping("/{recipeId}")
-    public ResponseEntity<Recipe> updateOneRecipe(@PathVariable Integer recipeId, @RequestParam Integer userId,
+    public ResponseEntity<Recipe> updateOneRecipe(@PathVariable Integer recipeId, @RequestParam Long userId,
             @Valid @RequestBody Recipe recipe) {
         Recipe updatedRecipe = recipeService.updateOneRecipe(recipeId, recipe, userId);
         logger.info("User with id " + userId + "Updated recipe with id " + recipeId + ".");
@@ -64,7 +64,7 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{recipeId}")
-    public ResponseEntity<HttpStatus> deleteOneRecipe(@PathVariable Integer recipeId, @RequestParam Integer userId) {
+    public ResponseEntity<HttpStatus> deleteOneRecipe(@PathVariable Integer recipeId, @RequestParam Long userId) {
         recipeService.deleteRecipe(recipeId, userId);
         logger.info("Deleted recipe with id " + recipeId + ".");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

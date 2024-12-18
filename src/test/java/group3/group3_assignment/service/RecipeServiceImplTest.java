@@ -36,7 +36,7 @@ public class RecipeServiceImplTest {
     // initialize recipe object before each test
     @BeforeEach
     public void setup() {
-        user = User.builder().id(1).build();
+        user = User.builder().id(1L).build();
         recipe = Recipe.builder().title("Stir Fried Noodles")
                 .id(1)
                 .user(user)
@@ -126,14 +126,14 @@ public class RecipeServiceImplTest {
     @Test
     public void testUpdateOneRecipe() {
         Integer recipeId = 1;
-        Integer userId = 1;
+        Long userId = 1L;
 
         // mocking the recipeRepo by finding the recipeId and returning an optional
         when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.of(recipe));
 
         // creating a updated recipe
         Recipe recipeToUpdate = Recipe.builder()
-                .id(userId)
+                .id(recipeId)
                 .user(user)
                 .title("Dijon Mustard Salmon")
                 .imgSrc("https://getfish.com.au/cdn/shop/articles/Step_4_-_crispy_salmon.png?v=1715832861")
@@ -168,7 +168,7 @@ public class RecipeServiceImplTest {
     @Test
     public void testUpdateOneRecipeNotFound() {
         Integer recipeId = 2;
-        Integer userId = 2;
+        Long userId = 2L;
 
         // mock the repo behaviour by finding the id
         when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.empty());
@@ -178,7 +178,7 @@ public class RecipeServiceImplTest {
     @Test
     public void testDeleteRecipe() {
         Integer recipeId = 1;
-        Integer userId = 1;
+        Long userId = 1L;
 
         // mocking the recipeRepo by finding the recipeId and returning an optional
         when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.of(recipe));
@@ -193,7 +193,7 @@ public class RecipeServiceImplTest {
     @Test
     public void testDeleteRecipeNotFound() {
         Integer recipeId = 2;
-        Integer userId = 2;
+        Long userId = 2L;
 
         // mock the repo behaviour by finding the id
         when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.empty());

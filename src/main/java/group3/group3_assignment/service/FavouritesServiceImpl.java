@@ -10,6 +10,7 @@ import group3.group3_assignment.entity.Recipe;
 import group3.group3_assignment.exception.DuplicateFavouritesException;
 import group3.group3_assignment.exception.FavUserNotFoundException;
 import group3.group3_assignment.exception.RecipeNotFoundException;
+import group3.group3_assignment.exception.UserNotFoundException;
 import group3.group3_assignment.repository.UserRepo;
 import group3.group3_assignment.repository.FavouritesRepository;
 import group3.group3_assignment.repository.RecipeRepo;
@@ -54,7 +55,8 @@ public class FavouritesServiceImpl implements FavouritesService {
     if (userRepo.findById(id) == null) {
       throw new FavUserNotFoundException();
     }
-    User selectedUser = (User) userRepo.findById(id);
+    User selectedUser = userRepo.findById(id)
+        .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     if (favouritesRepository.findByUserIdAndRecipeId(id, recipeId) != null) {
       throw new DuplicateFavouritesException();
     }

@@ -7,7 +7,7 @@ import group3.group3_assignment.entity.User;
 // import java.util.List;
 // import java.util.Optional;
 
-public interface UserRepo extends JpaRepository<User, Integer> {
+public interface UserRepo extends JpaRepository<User, Long> {
 
     // Optional<User> findById(Long id);
 

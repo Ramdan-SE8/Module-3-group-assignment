@@ -32,7 +32,7 @@ public class Favourites {
   // This ignores the favourites field
   @JsonIgnoreProperties("favourites")
   @ManyToOne(optional = false)
-  @JoinColumn(name = "recipe_id", referencedColumnName = "id")
+  @JoinColumn(name = "recipe_id", referencedColumnName = "recipeId")
   private Recipe recipe;
 
   // @JsonIgnoreProperties("customer")

@@ -8,17 +8,17 @@ import java.util.List;
 public interface UserService {
     User addUser(User user);
 
-    User getUser(Integer id);
+    User getUser(Long id);
 
     List<User> getAllUsers();
 
-    User updateUser(Integer id, User user);
+    User updateUser(Long id, User user);
 
-    void deleteUser(Integer id);
+    void deleteUser(Long id);
 
-    Recipe addRecipeToUser(Integer id, Recipe recipe);
+    Recipe addRecipeToUser(Long id, Recipe recipe);
 
-    List<Recipe> getRecipesByUser(Integer userId);
+    List<Recipe> getRecipesByUser(Long userId);
 
     // Recipe uploadRecipe(Integer userId, Recipe recipe);
 

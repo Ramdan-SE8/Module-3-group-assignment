@@ -34,7 +34,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe updateOneRecipe(Integer recipeId, Recipe recipe, Integer userId) {
+    public Recipe updateOneRecipe(Integer recipeId, Recipe recipe, Long userId) {
         // try to get recipe with userid and recipeid. if not found, throw exception.
         Recipe recipeToUpdate = recipeRepo.findByUser_IdAndId(userId, recipeId)
                 .orElseThrow(() -> new RecipeNotFoundException(recipeId));
@@ -56,7 +56,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteRecipe(Integer recipeId, Integer userId) {
+    public void deleteRecipe(Integer recipeId, Long userId) {
         // try to get recipe with userid and recipeid. if not found, throw exception.
         Recipe recipeToDelete = recipeRepo.findByUser_IdAndId(userId, recipeId)
                 .orElseThrow(() -> new RecipeNotFoundException(recipeId));
