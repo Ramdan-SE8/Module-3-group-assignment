@@ -1,11 +1,14 @@
 package group3.group3_assignment.config;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
+import group3.group3_assignment.entity.Favourites;
 import group3.group3_assignment.entity.Recipe;
 import group3.group3_assignment.entity.User;
+import group3.group3_assignment.repository.FavouritesRepository;
 import group3.group3_assignment.repository.RecipeRepo;
 import group3.group3_assignment.repository.UserRepo;
 import jakarta.annotation.PostConstruct;
@@ -15,15 +18,29 @@ public class DataLoader {
         private RecipeRepo recipeRepo;
         private UserRepo userRepo;
 
-        public DataLoader(RecipeRepo recipeRepo, UserRepo userRepo) {
+        private FavouritesRepository favouritesRepository;
+
+        public DataLoader(RecipeRepo recipeRepo, UserRepo userRepo, FavouritesRepository favouritesRepository) {
                 this.recipeRepo = recipeRepo;
                 this.userRepo = userRepo;
-
+                this.favouritesRepository = favouritesRepository;
         }
 
         @PostConstruct
         public void loadData() {
                 recipeRepo.deleteAll();
+
+                String dateToParse1 = "2018-11-22";
+                String dateToParse2 = "2018-11-01";
+                String dateToParse3 = "2018-12-15";
+                String dateToParse4 = "2024-05-01";
+                String dateToParse5 = "2024-05-15";
+                LocalDate parsedDate1 = LocalDate.parse(dateToParse1);
+                LocalDate parsedDate2 = LocalDate.parse(dateToParse2);
+                LocalDate parsedDate3 = LocalDate.parse(dateToParse3);
+                LocalDate parsedDate4 = LocalDate.parse(dateToParse4);
+                LocalDate parsedDate5 = LocalDate.parse(dateToParse5);
+
                 User user1 = userRepo.save(User.builder().email("abc@gmail.com").username("John")
                                 .password("123ABCabc!@#").build());
                 User user2 = userRepo.save(User.builder().email("123@gmail.com").username("Stark")
@@ -118,6 +135,51 @@ public class DataLoader {
                                                 "Stir-fry garlic, carrots, and zucchini in sesame oil.",
                                                 "Add the cooked noodles and soy sauce, toss well, and serve."))
                                 .build());
+
+                Favourites favourites1 = favouritesRepository.save(Favourites.builder()
+                                .remarks("faved")
+                                .favouritesDate(parsedDate1)
+                                .recipe(recipe1)
+                                .user(user1)
+                                .build()
+
+                );
+
+                Favourites favourites2 = favouritesRepository.save(Favourites.builder()
+                                .remarks("faved")
+                                .favouritesDate(parsedDate2)
+                                .recipe(recipe2)
+                                .user(user1)
+                                .build()
+
+                );
+
+                Favourites favourites3 = favouritesRepository.save(Favourites.builder()
+                                .remarks("faved")
+                                .favouritesDate(parsedDate3)
+                                .recipe(recipe3)
+                                .user(user1)
+                                .build()
+
+                );
+
+                Favourites favourites4 = favouritesRepository.save(Favourites.builder()
+                                .remarks("faved")
+                                .favouritesDate(parsedDate4)
+                                .recipe(recipe3)
+                                .user(user2)
+                                .build()
+
+                );
+
+                Favourites favourites5 = favouritesRepository.save(Favourites.builder()
+                                .remarks("faved")
+                                .favouritesDate(parsedDate5)
+                                .recipe(recipe5)
+                                .user(user2)
+                                .build()
+
+                );
 
         }
 }
