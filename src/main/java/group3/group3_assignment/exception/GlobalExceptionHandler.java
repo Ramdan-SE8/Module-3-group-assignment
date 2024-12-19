@@ -38,6 +38,29 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    //********************Added by Ramdan 2024-12-19********************************************* */
+    @ExceptionHandler(FavouritesNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleFavouritesNotFoundException(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), LocalDateTime.now());
+        logger.warn(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FavUserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleFavUserNotFoundException(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), LocalDateTime.now());
+        logger.warn(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateFavouritesException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateFavouritesException(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), LocalDateTime.now());
+        logger.warn(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+   //********************************************************************************************** */
+
     // General exception
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleGeneralExceptions(Exception e) {
