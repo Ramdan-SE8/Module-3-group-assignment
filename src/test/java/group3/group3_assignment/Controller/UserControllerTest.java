@@ -2,6 +2,7 @@ package group3.group3_assignment.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import group3.group3_assignment.entity.Favourites;
 import group3.group3_assignment.entity.User;
 
 import group3.group3_assignment.exception.UserNotFoundException;
@@ -22,6 +23,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,13 +48,13 @@ public class UserControllerTest {
 
         @BeforeEach
         public void setUp() {
+
                 // Initialize the user object before each test
                 // user = new User();
                 // user.setUsername("john_doe");
                 // user.setEmail("john_doe@example.com");
                 // user.setPassword("password123");
                 user = User.builder()
-                                .id(1L)
                                 .username("john_doe")
                                 .email("john_doe@example.com")
                                 .password("password123")

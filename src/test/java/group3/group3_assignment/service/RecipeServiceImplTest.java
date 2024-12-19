@@ -17,6 +17,7 @@ import group3.group3_assignment.entity.Recipe;
 import group3.group3_assignment.entity.User;
 import group3.group3_assignment.exception.RecipeNotFoundException;
 import group3.group3_assignment.repository.RecipeRepo;
+import group3.group3_assignment.repository.UserRepo;
 
 // unit test for service
 @ExtendWith(MockitoExtension.class)
@@ -25,6 +26,9 @@ public class RecipeServiceImplTest {
     // 1. Create a mock repository
     @Mock
     public RecipeRepo recipeRepo;
+
+    @Mock
+    public UserRepo userRepo;
 
     // 2. inject the mock repository into service implementation class
     @InjectMocks
@@ -53,19 +57,23 @@ public class RecipeServiceImplTest {
                         "Stir-fry garlic, carrots, and bell peppers in sesame oil.",
                         "Add cooked noodles and soy sauce, tossing until combined.",
                         "Garnish with green onions and serve."))
+                .user(user)
                 .build();
 
     }
 
     // 3. create the test
     @Test
-    public void testCreateRecipe() {
+    public void testCreateRecipeToUser() {
+
+        // 3a. Mock the userRepo behaviour to return the user when findById is called
+        when(userRepo.findById(user.getId())).thenReturn(Optional.of(user));
         // 3a. mocking recipeRepo behaviour by saving the recipe into the mock
         // repository
         when(recipeRepo.save(recipe)).thenReturn(recipe);
 
         // 3b. call the method to be tested
-        Recipe createdRecipe = recipeServiceImpl.createRecipe(recipe);
+        Recipe createdRecipe = recipeServiceImpl.createRecipeToUser(user.getId(), recipe);
 
         // 3c. assert the results
         assertEquals(recipe, createdRecipe, "Recipe should be the same as create recipe");
@@ -77,12 +85,16 @@ public class RecipeServiceImplTest {
 
     @Test
     public void testCreateRecipeDatabaseConnectionError() {
+
+        // 3a. Mock the userRepo behaviour to return the user when findById is called
+        when(userRepo.findById(user.getId())).thenReturn(Optional.of(user));
         // 3a. mocking recipeRepo behaviour by saving the recipe into mock repository
         // but throws an error
         when(recipeRepo.save(recipe)).thenThrow(new RuntimeException("Database connection error"));
 
         // 3b. create a RunTimeException object using the results of createRecipe
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> recipeServiceImpl.createRecipe(recipe));
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> recipeServiceImpl.createRecipeToUser(user.getId(), recipe));
 
         // 3c. asserts the results by getting message of exception
         assertEquals("Database connection error", exception.getMessage());
@@ -129,12 +141,10 @@ public class RecipeServiceImplTest {
         Long userId = 1L;
 
         // mocking the recipeRepo by finding the recipeId and returning an optional
-        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.of(recipe));
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(recipe));
 
         // creating a updated recipe
         Recipe recipeToUpdate = Recipe.builder()
-                .id(recipeId)
-                .user(user)
                 .title("Dijon Mustard Salmon")
                 .imgSrc("https://getfish.com.au/cdn/shop/articles/Step_4_-_crispy_salmon.png?v=1715832861")
                 .description("A simple yet flavorful Dijon mustard salmon baked to perfection.")
@@ -171,7 +181,7 @@ public class RecipeServiceImplTest {
         Long userId = 2L;
 
         // mock the repo behaviour by finding the id
-        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.empty());
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.empty());
         assertThrows(RecipeNotFoundException.class, () -> recipeServiceImpl.updateOneRecipe(recipeId, recipe, userId));
     }
 
@@ -181,7 +191,7 @@ public class RecipeServiceImplTest {
         Long userId = 1L;
 
         // mocking the recipeRepo by finding the recipeId and returning an optional
-        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.of(recipe));
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(recipe));
 
         // call the deleteRecipe method
         recipeServiceImpl.deleteRecipe(recipeId, userId);
@@ -196,7 +206,7 @@ public class RecipeServiceImplTest {
         Long userId = 2L;
 
         // mock the repo behaviour by finding the id
-        when(recipeRepo.findByUser_IdAndId(userId, recipeId)).thenReturn(Optional.empty());
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.empty());
         assertThrows(RecipeNotFoundException.class, () -> recipeServiceImpl.deleteRecipe(recipeId, userId));
     }
 }

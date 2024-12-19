@@ -5,7 +5,7 @@ import java.util.List;
 import group3.group3_assignment.entity.Recipe;
 
 public interface RecipeService {
-    Recipe createRecipe(Recipe recipe);
+    Recipe createRecipeToUser(Long userId, Recipe recipe);
 
     Recipe getOneRecipe(Integer userId);
 

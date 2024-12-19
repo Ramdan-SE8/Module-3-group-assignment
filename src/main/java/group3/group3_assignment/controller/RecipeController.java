@@ -34,9 +34,9 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @PostMapping("")
-    private ResponseEntity<Recipe> createRecipe(@Valid @RequestBody Recipe recipe) {
-        Recipe newRecipe = recipeService.createRecipe(recipe);
+    @PostMapping("/{userId}")
+    private ResponseEntity<Recipe> createRecipeToUser(@Valid @RequestBody Recipe recipe, @PathVariable Long userId) {
+        Recipe newRecipe = recipeService.createRecipeToUser(userId, recipe);
         logger.info("Created new Recipe");
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }

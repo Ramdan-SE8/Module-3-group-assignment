@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -50,8 +51,12 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @JsonIgnoreProperties("recipes")
+    @JsonIgnoreProperties({ "recipes", "user" })
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recipe> recipes;
+
+    @JsonIgnoreProperties({ "recipe", "user", "remarks" })
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favourites> favourites;
 
 }

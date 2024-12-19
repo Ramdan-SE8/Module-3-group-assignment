@@ -5,21 +5,29 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import group3.group3_assignment.entity.Recipe;
+import group3.group3_assignment.entity.User;
 import group3.group3_assignment.exception.RecipeNotFoundException;
 import group3.group3_assignment.exception.UserNotAuthorizeException;
+import group3.group3_assignment.exception.UserNotFoundException;
 import group3.group3_assignment.repository.RecipeRepo;
+import group3.group3_assignment.repository.UserRepo;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
     private RecipeRepo recipeRepo;
+    private UserRepo userRepo;
 
-    public RecipeServiceImpl(RecipeRepo recipeRepo) {
+    public RecipeServiceImpl(RecipeRepo recipeRepo, UserRepo userRepo) {
         this.recipeRepo = recipeRepo;
+        this.userRepo = userRepo;
     }
 
     @Override
-    public Recipe createRecipe(Recipe recipe) {
+    public Recipe createRecipeToUser(Long userId, Recipe recipe) {
+        User selectedUser = userRepo.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " is not found"));
+        recipe.setUser(selectedUser);
         return recipeRepo.save(recipe);
     }
 
@@ -35,13 +43,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe updateOneRecipe(Integer recipeId, Recipe recipe, Long userId) {
-        // try to get recipe with userid and recipeid. if not found, throw exception.
-        Recipe recipeToUpdate = recipeRepo.findByUser_IdAndId(userId, recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException(recipeId));
+        // try to get recipe. if not found, throw exception.
+        Recipe recipeToUpdate = recipeRepo.findById(recipeId).orElseThrow(() -> new RecipeNotFoundException(recipeId));
 
-        // recipe is found
-        // throw exception if the user id is not the same as the user id found in
-        // recipes
+        // check if found recipe belongs to the user who created it. if not, throw
+        // exception. so only the user who created it can edit.
         if (!recipeToUpdate.getUser().getId().equals(userId)) {
             throw new UserNotAuthorizeException(userId, "edit");
         }
@@ -57,13 +63,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void deleteRecipe(Integer recipeId, Long userId) {
-        // try to get recipe with userid and recipeid. if not found, throw exception.
-        Recipe recipeToDelete = recipeRepo.findByUser_IdAndId(userId, recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException(recipeId));
-
-        // recipe is found
-        // throw exception if the user id is not the same as the user id found in
-        // recipes
+        // try to get recipe if not found, throw exception.
+        Recipe recipeToDelete = recipeRepo.findById(recipeId).orElseThrow(() -> new RecipeNotFoundException(recipeId));
+        // check if found recipe belongs to the user who created it. if not, throw
+        // exception. so only the user who created it can delete.
         if (!recipeToDelete.getUser().getId().equals(userId)) {
             throw new UserNotAuthorizeException(userId, "delete");
         }

@@ -2,6 +2,7 @@ package group3.group3_assignment.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -62,11 +63,11 @@ public class Recipe {
     @Column(name = "steps")
     private List<String> steps;
 
-    @JsonIgnoreProperties("recipe")
+    @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favourites> favourites;
 
-    @JsonIgnoreProperties("recipes")
+    @JsonIgnoreProperties({ "recipes", "password", "favourites" })
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
