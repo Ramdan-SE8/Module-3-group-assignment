@@ -37,7 +37,7 @@ public class FavouritesController {
       @RequestBody Favourites favourites) {
     Favourites newFavourites = favouritesService.addFavourites(userId, recipeId, favourites);
     logger.info(
-        "User (useruserId " + userId + ") added one recipe (recipeId " + recipeId + ") to favourites list");
+        "User (userId " + userId + ") added one recipe (recipeId " + recipeId + ") to favourites list");
     return new ResponseEntity<>(newFavourites, HttpStatus.CREATED);
   }
 
@@ -46,7 +46,7 @@ public class FavouritesController {
   public ResponseEntity<HttpStatus> deleteOneFavourite(@PathVariable Long userId, @PathVariable Integer recipeId) {
     favouritesService.deleteFavourites(userId, recipeId);
     logger.info(
-        "User (useruserId " + userId + ") removed recipe (recipeId " + recipeId + ") from favourites list");
+        "User (userId " + userId + ") removed recipe (recipeId " + recipeId + ") from favourites list");
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
@@ -54,7 +54,7 @@ public class FavouritesController {
   @GetMapping("/{userId}")
   public ResponseEntity<ArrayList<Favourites>> getAllFavourites(@PathVariable Long userId) {
     ArrayList<Favourites> foundfFavourites = favouritesService.getFavouritesByUserId(userId);
-    logger.info("User (useruserId " + userId + ") retrieved array of recipes in favourites list");
+    logger.info("User (userId " + userId + ") retrieved array of recipes in favourites list");
     return new ResponseEntity<>(foundfFavourites, HttpStatus.OK);
   }
 
